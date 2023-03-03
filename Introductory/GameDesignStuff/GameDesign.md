@@ -988,7 +988,7 @@ class Car {
 
 At first glance, this feels slightly less readable, however it removes instances of ambiguity. The conditional statements (if and else) should technically also have the curly braces, but conditionals with a single line afterwards don't need curly braces eiter for convention or readability, so I shall leave them. 
 
-But now that we have a class comes using it. Each of the things defined inside of a class can be called one of its "members". To access members, we use the dot operator, or ".", followed by what we want to access. So, let's create a Car, and access the number of passengers. 
+But now that we have a class comes using it. Each of the things defined inside of a class can be called one of its "members". To access members, we use the dot operator, or ```.```, followed by what we want to access. So, let's create a Car, and access the number of passengers. 
 
 ```C#
 Car red_car = new Car()
@@ -1022,7 +1022,7 @@ A constructor is always necessary for a class to be created, and we called it ab
 Car red_car = new Car();
 ```
 
-The first use of "Car" is saying that the type of the "red_car" variable is a car. But, the second use has parenthesis after it. That is a function, which serves to initialize the object. The "new" keyword just tells the program to give up some storage space for whatever the constructor does.
+The first use of "Car" is saying that the type of the "red_car" variable is a car. But, the second use has parenthesis after it. That is a function, which serves to initialize the object. The ```new``` keyword just tells the program to give up some storage space for whatever the constructor does.
 
 We didn't create this constructor. It was provided by default by the programming language. It does the bare minimum possible, basically just making sure there's enough memory for all the members of the class to exist. Usually the default constructor initializes a class to empty or general values, such as 0, or undefined. It'd also be possible to make it return an error, that way you know the values are always being provided.
 
@@ -1283,9 +1283,9 @@ encapsulation, abstraction, inheritance, and polymorphism [TODO]
 
 ### Structures 
 
-A structure is, simply put, a new description for a way to organize data. It structures other data types into a new one. Recall how we had data types such as the String, int, boolean, and so on. Each of those data types has a certain size within the computer, and each has their own rules for being interpreted. 
+A structure is, simply put, a new description for a way to organize data. It structures other data types into a new one. In Object oriented Languages (programming languages that use Objects as a main part of the language) often used for game design, such as C#, the structure or struct is actually just a "lightweight object". usually an object without functions. 
 
-A structure is the same way. For instance, we could make a new structure that consists of two ints, and have that new structure be called a coordinate. The two ints could represent an x and y position. We now have a new datatype that we can use easily for our variables, instead of needing to use two separate variables. With a struct, to access its members we use an operator called the dot operator. The dot operator (```.```) basically means "go to this location within this data". So something like 
+Recall how we had data types such as the String, int, boolean, and so on. Each of those data types has a certain size within the computer, and each has their own rules for being interpreted. A structure is the same way. For instance, we could make a new structure that consists of two ints, and have that new structure be called a coordinate. The two ints could represent an x and y position. We now have a new datatype that we can use easily for our variables, instead of needing to use two separate variables. With a struct, to access its members we use an operator called the dot operator. The dot operator (```.```) basically means "go to this location within this data". So something like 
 
 ```c
 variable.second_variable
@@ -1433,7 +1433,7 @@ struct TestStruct {
 TestStruct my_variable = new TestStruct {cool_bool = false, fun_int = 3, angry_string = "IM MAD"};
 ``` 
 
-You'll notice there that I've used an unseen operator, ```new```. The ```new``` operator can be ignored for now, but basically it calls on an Object or Structs "contructor" function. A constructor is a function whose job is to setup the memory for an object or structure, so that it can be used. Structs do *not* need to be initialized via the ```new``` operator, but if they aren't then you need to set each field manually, like below, before you can use it. 
+You'll notice there that I've used the ```new``` operator. The ```new``` operator  calls on an Object or Structs "contructor" function. A constructor is a function whose job is to setup the memory for an object or structure, so that it can be used. Structs do *not* need to be initialized via the ```new``` operator, but if they aren't then you need to set each field manually, like below, before you can use it. 
 
 ```C#
 struct TestStruct {
