@@ -407,6 +407,15 @@ This is a personal opinion of mine, but the previous example allowed the code to
 
 Doing these things will ensure that after 8 hours of coffee induced rage, you can at least *somewhat* tell what you were doing, or what you did. 
 
+Additionally it's possible to return a value from a function, instead of simply having the function be void. To do that, you change teh type of the function, and use the ```return``` keyword. A function's execution ends when it hits a return, so if you have code after a return statement, it won't actually run. Aside from that, the returned value is a stand-in for wherever the function is called. 
+
+```c
+A float function Pi()
+    return 3.1415926536
+    
+Print to the screen "" + (10 * Pi()) // the value returned by the Pi function will be multiplied by 10. 
+```
+
 #### Loops
 Sometimes we want to repeat code that we write multiple times, without rewriting it multiple times. Consider for instance, our above example. The code that we wrote up above was linear. It didn't loop. So, it would look something like this:
 
@@ -591,8 +600,687 @@ stateDiagram-v2
 
 *FizzFlark* handles its end of the work in ```Initialize```, ```ApplyFrame```, and ```UpdateFrame``` functions. In these, it generates the code to handle any settings we provide, like window size, aspect ratio, resolution, framerate, updates any physics in the scene, finds all the assets and models, makes sure updates are reaching the screen, and so on. 
 
-Beyond that, we only need to give the GameEngine our settings, and write the ```OnStart```, ```OnUpdate```, and ```OnClose``` methods to get all of the functionality that we're interested in. 
+I consider this important because it explains why we place our code in certain functions when writing for a Game Engine, and being able to visualize this helps decide where certain code needs to be placed in that stack of functions. For instance, if you have a function that initializes data and only needs to run once, should it go in ```OnStart``` or ```OnUpdate```? What about a block of code that allows the player's input keys to move their character around? 
 
+Beyond that, we only need to give the GameEngine our settings, and write the ```OnStart```, ```OnUpdate```, and ```OnClose``` methods to get all of the functionality that we're interested in. 
+With this foundation set up, we will move onto a slightly more complex aspect of programming often found in Game Design. 
+
+
+##### Using Arrays and Loops
+
+We now have a data structure we can use to store our data in one spot. Since we only plan to use 5 things, and we plan to do something very simple, I'll use an array. In *FlarkSpeak*, you can initialize arrays in a *FlarkSpeak*esque way, with english, or the way many other languages do with brackets. Thus:
+
+```c
+
+The int Array
+```
+
+is the same as 
+
+```c 
+The int[]
+```
+When using *FlarkSpeak*. We will use the way other langauges do, but if you'd like to write your psuedocode differently for your clarity, you may. 
+
+Remember that Arrays are of fixed size. This means we must either tell the language the size of the array, or we must tell it what data to fit inside at the start. We will do that using curly braces, similarly to other languages. 
+
+To create an array that can hold 5 booleans, we would say:
+```c
+the bool[5] our_booleans
+```
+
+To create an array with the first 10 integers we would say:
+```c
+the int[] first_ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+```
+
+
+Arrays contain multiple values, so you must access them at what's called an "index". An index is the position or spot of an item in an Array, List, or other collection. We have to tell the array which of its values we actually want. Array indexes, like many other things in programming, start at the number 0. Let's look at an example in *FlarkSpeak*. 
+
+```c
+the int[] first_ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+Print to the screen "" + first_ints[0] // Access the first item in the array
+                                    // First_ints[0] is 1
+                                    // Add to string to convert it (FlarkSpeak specific)
+```
+Outputs
+```bash
+> 1
+```
+
+We could also use that to create our list, such as the below:
+
+```c
+the int[10] first_ints
+int[0] = 1
+int[1] = 2
+int[2] = 3
+int[3] = 4
+int[4] = 5
+int[5] = 6
+int[6] = 7
+int[7] = 8
+int[8] = 9
+int[9] = 10
+
+Print to the screen "" + first_ints[0]
+// same output as before
+```
+Outputs
+```bash
+> 1
+```
+
+So, using this let's create a ```for``` loop. A for loop has four parts, which I will call the predicate, the condition, the body, and the step. 
+- Predicate - the setup of the loop's variable.
+- Condition - thing the loop is checking or waiting for.
+- Body - What we do in the actual loop
+- Step - what the loop does every time it finishes running once. 
+
+Let's say we had a loop we wanted to have count from 0 to 10, and print it out. Breaking what we want to do down, we want to: (1) create a variable to store the value we're currently on, (2) print the variable, (3) increment (increase) the variable's value, and (4) check if we should continue counting. That would make our loop have this structure:
+- Predicate = create an int equal to 0
+- Condition = Predicate int variable is less than or equal to (<=) 10
+- Body = Print out the variable 
+- Step = Increase the predicate int variable by one. 
+
+In *FlarkSpeak* this works relatively similar to other langauges. A psuedocode example of *FlarkSpeak* code would be:
+
+```c
+for (Predicate ; Condition ; Step) 
+    Body
+    // Indent to set the scope
+```
+
+The semicolons separate the code, so *FlarkSpeak* can tell what's what. In real *FlarkSpeak* our counting loop would look like this. 
+
+```c
+for (The int x = 0; x is <= 10; x = x + 1)
+    Print to the screen "" + x
+```
+Which would output
+
+```bash
+> 0
+> 1
+> 2
+> 3
+> 4
+> 5
+> 6
+> 7
+> 8
+> 9 
+> 10
+```
+
+
+
+#### Objects/Structures
+
+To clarify the role of Objects and Structures, let's return to our Dungeon Master analogy. We've discussed that dungeon masters may have functions/methods in the form of rulebooks and tables. We've discussed that a DM may have assets in the form of character cards and art. We've discussed that they DMs work to combine these things to simulate a world. But let's also consider the organization of those things. 
+
+A Dungeon Master (hopefully) doesn't reference the entirety of their several hundred pages of content, and several tables of cheat sheets and tables. Instead, they have their content and assets organized. 
+
+A DM might have a cheat sheet consisting of only the rules for character action, and a separate sheet with only the rules regarding loot or crafting. Their screen might hide tables for managing travel, and calculating saves, while the sheets the players are given might contain the summaries of their spells and stats. 
+
+The running theme with the above is that everything that belongs together, is encapsulated into its own unit. This simplifies a DM's job, because they can manage a single thing in a single situation, and have everything they might need to do that. 
+
+The same concept occurs in computer programming in the form of Objects and Structures. Not all programming languages support Objects or Structures, but many do, and for some it's integral to the language's use. In the field of game design, Object Oriented Languages (those that make obvjects integral to their use) make up a significant amount of the market for the langauges Game Engines and video game programmers use. This has to do with the principle behind Object Oriented design. 
+
+Object Oriented design typically aims to *model* an entity or target through code. For instance, instead of creating all of the functions and rules related to say, an apple, and then promising to only use them correctly, an Object Oriented language would want you to make all of the functions for an apple *inside* of an 'apple' object. Then, you would use that object to call them. 
+
+Generally speaking, Objects can be abstract, or they can be instanced. An 'abstract' object is one that has all of the principles of an object, but doesn't need to be stored in a variable. An abstract object typically serves more as a collection of functions, or a model for other instanced objects, than an object itself. A 'instanced' object on the other hand, typically expects to be created and stored into a variable. Regardless of which of these you refer to, we often call objects 'classes' or 'classes of objects'.
+
+Consider a car factory and a car. You might put all of the functions a car factory performs in a "car factory" object, and call them on variables you want to. But, you might want to specifically save data related to specific "car" objects, so you would make multiple variables of the "car" type that you create. 
+
+##### Object Examples
+
+Luckily *FlarkSpeak* supports objects. Let's look at making an example object in *FlarkSpeak*, such as our car and car factory. First, let's decide what we want each to do, and what we want each to have. 
+
+The car Object should have:
+- Gas, determining how much energy it has
+- Mileage, determining how far it can get on x amount of gas. 
+- Passengers, determining how many people it has inside
+- Seats, determining how many people it can hold
+- Driver, determining if it has a driver or not
+
+Now, for each of the above we want to choose a data type that would represent it well, and be useful to us. 
+- Gas would be well represented by a float (decimal), so we can have partial gallons
+- Mileage would be well represented by a float (decimal), so we can have partial miles per gallon 
+- Passengers would be well represented by an int (number), because we can't have a part of a person
+- Seats would likewise be well represented by an int (number), because we can't have partial seats (or partial people)
+- Driver would be well represented by a boolean, because we want to answer a true or false question. 
+
+We also want our car to be able to do some stuff. For now, let's just let it check if it can do stuff. 
+- canDrive, given a distance decide whether or not the car can go 
+- canPickup, given a number of passengers decide whether it could fit them 
+- canDropoff, given a number of passengers decide whether it could drop them off
+
+All of these answer true or false questions, so they should all return boolean values. And, each of these should accept a value. 
+- canDrive should accept a float distance (since we allow partial miles), and return a boolean
+- canPickup should accept an integer amount of people, and return a boolean
+- canDropoff should accept an integer amount of people, and return a boolean. 
+
+If we want to try to implement this, we'll need to understand conditionals. 
+
+##### Conditionals 
+
+Conditionals are, like they sound, statements that evaluate and execute based on conditions. The "While" loop, is a conditional loop, and the "for" loop generally uses a condition. 
+
+The main conditional statements are ```if``` and ```else```. The ```if``` conditional executes anything within its body "if" the condition it's given calculates out to be true. The ```else``` conditional executes anything within its body if the conditional above it failes to execute. 
+
+An example condition might be "2 >= 5". This statement is, clearly, false. Thus, the below code will do nothing. 
+
+```c
+if (2 >= 5)
+    Print to the screen "The milk tastes weird"
+```
+
+Versus the below code
+
+```c
+if (2 >= 5)
+    Print to the screen "The milk tastes weird"
+else 
+    Print to the screen "The milk tastes normal"
+```
+
+Would output
+
+> The milk tastes normal 
+
+Conditionals can check equality, numeric difference, or the result of an operation. Generally, if something equates to a non-zero value it can be considered true. To check equality, we use a double equal sign or "==" to distinguish from a single equal sign, which sets equality. To do numeric equality and inequality, we can use the greater and lesser than signs, alongside the equal sign. 
+
+```c
+(2 < 3) // this is true
+(2 > 3) // this is false
+(2 >= 2) // this is true
+(10 + 2) // this is true
+(0) // this is false
+(5 == 5) // this is true 
+
+// initialize a variable 
+the int x = 7
+
+(x == 9) // this is false
+(x = 11) // this is true, and changes the value of x!!!
+(x == x) // this is true 
+```
+
+All of the above can be placed inside of a conditional. We can also add the "not", "and", and "or" operations - "!", "&&", and "||" respectively.
+
+```c
+(2<3 || 3 < 2) // this is true
+(2<3 && 3<2) // this is false
+(!false) // this is true
+(!true) // this is false
+```
+
+The real strength of conditionals comes with composing their conditions of variables. For instance, you could check if a variable equals true, or you could check if player 1's number is bigger than player 2's number. Alternatively, or perhaps in addition, you can compose conditions and conditionals together. For instance, we could take user input, and store it in a variable, and check what it equals
+
+```c
+The char user_input = Accept a character of input
+
+if (user_input == 'y') // check if it's equal to the character 'y'
+    Print to the screen "Awesome!"
+else if (user_input == 'm') // Note this! It's chaining two conditionals together
+    Print to the screen "Maybe awesome?"
+else 
+    Print to the screen "Not Awesome.."
+```
+
+First, allow me to note the middle conditional is actually two together. It's an else, connected to the first conditional, and then there's a second within it. It's thus equivalent to this
+
+```c
+The char user_input = Accept a character of input
+
+if (user_input == 'y')
+    Print to the screen "Awesome!"
+else 
+    if (user_input == 'm')
+        Print to the screen "Maybe awesome?"
+    else 
+        Print to the screen "Not Awesome.."
+```
+
+I'd also note that this accepts all possible character values in the last condition. So, if I entered 's' it would print "Not Awesome..". If we want only three values to be considered, we could either chain another if onto this, or remove the elses entirely. 
+
+So either
+
+```c
+The char user_input = Accept a character of input 
+
+if (user_input == 'y')
+    Print to the screen "Awesome!"
+else if (user_input == 'm')
+    Print to the screen "Maybe awesome?"
+else if (user_input == 'n') 
+    Print to the screen "Not Awesome.."
+        
+```
+
+or just 
+
+```c
+if (user_input == 'y')
+    ... 
+if (user_input == 'n')
+    ...
+if (user_input == 'm')
+    ...
+```
+
+The issue with not chaining if's with elses is that they're unaware of each other, so they can be unperformant. If a single if is true, it's assumed that the else conditions don't need to run, but independent if statements can't consider that. 
+
+But breaking from this quick introduction, let's implement our car. 
+
+##### Using Objects 
+
+Our car object will be implemented with the goals we mentioned at the start of this section. 
+
+```c
+The class Car
+    the float gas
+    the float mileage
+    the int passengers
+    the int seats
+    the bool driver
+    
+    A bool function called canDrive(float Distance)
+        float number_of_gallons = Distance/mileage
+        if (number_of_gallons > gas)
+            // the number of gallons needed is greater than the amount of gas we have
+            return false
+        else 
+            // else runs if the above statement doesn't
+            return true 
+
+    A bool function canPickup(int numPeople)
+        if (numPeople > (seats-passengers))
+            return false
+        else 
+            return true
+            
+    A bool function canDropoff(int numPeople)
+        if (numPeople>passengers)
+            return false
+        else 
+            return true
+```
+
+First, I think that's a bit ugly. *FlarkSpeak* has some cool conventions that can make that simpler for us. One, we can get rid of the unneccessary the's, a's, and other introductory words. So, instead of 
+
+```c
+the float gas
+```
+
+
+we could just say
+
+```c
+float gas
+```
+ 
+ Additionally, the scope is a little bit unclear at times. Especially when we have a line between lines. We can use curly-braces to indicate scope, so this:
+ 
+ ```c
+bool function called canDrive
+    line1..
+    line2..
+    line3..
+    
+    line_4..?
+int count = 3 // stuff outside the function
+```
+
+Is the same as:
+
+```c
+bool function called canDrive(){
+    line1..
+    line2..
+    line3..
+    
+    line4..
+}
+int count = 3 // stuff outside the function
+```
+
+We'll also get rid of the extra fluff around functions and arrays. The parenthesis and square brackets are enough of an indicator, and we can use naming convention to make their differences more apparent. Let's also end lines with semicolons
+
+Let's apply our new conventions to the object class. 
+
+```c#
+
+class Car {
+    float gas;
+    float mileage;
+    int passengers;
+    int seats;
+    bool driver;
+    
+    bool canDrive(float Distance) {
+        float number_of_gallons = Distance/mileage;
+        
+        if (number_of_gallons > gas)
+            // the number of gallons needed is greater than the amount of gas we have
+            return false;
+        else
+            // else runs if the above statement doesn't
+            return true;
+    }
+
+    bool canPickup(int numPeople){
+        if (numPeople > (seats-passengers))
+            return false;
+        else 
+            return true;
+    }
+            
+    bool canDropoff(int numPeople){}
+        if (numPeople>passengers)
+            return false;
+        else 
+            return true;
+        }
+}
+```
+
+At first glance, this feels slightly less readable, however it removes instances of ambiguity. The conditional statements (if and else) should technically also have the curly braces, but conditionals with a single line afterwards don't need curly braces eiter for convention or readability, so I shall leave them. 
+
+But now that we have a class comes using it. Each of the things defined inside of a class can be called one of its "members". To access members, we use the dot operator, or ".", followed by what we want to access. So, let's create a Car, and access the number of passengers. 
+
+```C#
+Car red_car = new Car()
+```
+
+This line creates a new instance of the "Car" class, and stores that object in the variable "red_car". The type of an Object is the same as the class it's made of, so a "Car" object is of type "Car" (or maybe "Object"). 
+
+Let's apply the dot operator to show how many passengers the car has. 
+
+```C#
+Car red_car = new Car()
+
+Print to the screen "The number of passengers is: " + red_car.passengers
+```
+
+This would output
+
+> The number of passengers is: {???}
+
+The "{???}" is a quirk of *mine*, not the class. There's an issue with the above code. We never initialized, or set, the values inside of "red_car". So, any number could go there. Whatever was there when the memory was taken by our program would still be there. Some programming languages would automatically set it to zero for us, but *FlarkSpeak* wants us to be educated, so it doesn't. 
+
+There are two main ways to go about initializing these values. We could use what's called a constructor, or we could use manual initialization. 
+
+##### Constructors and Initialization 
+
+A constructor is a special function whose purpose is to setup and create an Object, or class instance. It typically has the same name as the class, and is defined within the class. It's also possible to apply a method called overloading, where you create multiple functions with the same name but different inputs, to get multiple different constructors. 
+
+A constructor is always necessary for a class to be created, and we called it above without realizing it.
+
+```C#
+Car red_car = new Car();
+```
+
+The first use of "Car" is saying that the type of the "red_car" variable is a car. But, the second use has parenthesis after it. That is a function, which serves to initialize the object. The "new" keyword just tells the program to give up some storage space for whatever the constructor does.
+
+We didn't create this constructor. It was provided by default by the programming language. It does the bare minimum possible, basically just making sure there's enough memory for all the members of the class to exist. Usually the default constructor initializes a class to empty or general values, such as 0, or undefined. It'd also be possible to make it return an error, that way you know the values are always being provided.
+
+Let's add a constructor to our class. We'll start with a default.
+
+```c#
+
+class Car {
+    float gas;
+    float mileage;
+    int passengers;
+    int seats;
+    bool driver;
+
+    Car() {
+        gas = 0;
+        mileage = 0;
+        passengers = 0;
+        seats = 0;
+        driver = false;
+    }
+
+    ... // the rest of the class
+}
+```
+
+Now we have a default Constructor! First, notice that we didn't need to provide a type for the constructor. This is typically the case. Second, let's have another lesson on readability!!!
+
+Since classes, and certain other structures in programming, need "instances" of them created, they get a special keyword for referring to themselves. That is the ```this``` keyword. The ```this``` keyword refers to the specific instance running the code.
+
+When you create a "Car" Object, the computer finds the "Car" class and copies over all of its data to a new variable. That new variable is what "this" refers to.
+
+So, let's rewrite our class.
+
+
+```c#
+
+class Car {
+    // we don't need to use this when creating these, but we could?
+    float gas;
+    float mileage;
+    int passengers;
+    int seats;
+    bool driver;
+
+    Car() {
+        this.gas = 0;
+        this.mileage = 0;
+        this.passengers = 0;
+        this.seats = 0;
+        this.driver = false;
+        /* We could also do something like
+        this.color = "red";
+            Even though we don't have a color property at present
+        */
+    }
+
+    ... // the rest of the class
+}
+```
+
+Now, let's add a constructor that accepts a value for the gas, and number of seats.
+
+```c#
+
+class Car {
+    // we don't need to use this when creating these, but we could?
+    float gas;
+    float mileage;
+    int passengers;
+    int seats;
+    bool driver;
+
+    Car() {
+        ... // Our Car constructor from above
+    }
+
+    Car(int gasAmnt, int seatsNum){
+        this.gas = (float) gasAmnt; // "(float)" converts the value after it into a float type, instead of an int.
+        this.seats = seatsNum;
+    }
+
+    ... // the rest of the class
+}
+```
+
+The above constructor doesn't initialize the other values to zero.. We could add that, or we could be lazy. Constructors can call other constructors!
+
+```c#
+
+class Car {
+    // we don't need to use this when creating these, but we could?
+    float gas;
+    float mileage;
+    int passengers;
+    int seats;
+    bool driver;
+
+    Car() {
+        ... // Our Car constructor from above
+    }
+
+    Car(int gasAmnt, int seatsNum){
+        Car(); // Empty constructor initializes everything to zero.
+        this.gas = (float) gasAmnt; // change from zero to new val
+        this.seats = seatsNum; // change from zero to new val
+    }
+
+    ... // the rest of the class
+}
+```
+
+We could also make a constructor that accepts all of the values, and have our default call that.
+
+```C#
+class Car {
+    // we don't need to use this when creating these, but we could?
+    float gas;
+    float mileage;
+    int passengers;
+    int seats;
+    bool driver;
+
+    Car() {
+        Car(0, 0, 0, 0, false); // This will call the constructor below
+                                // The program can recognize which constructor you mean because of the input types
+    }
+
+    Car(float gasAmnt, float mileageAmnt, int passAmnt, int seatsNum, bool isDriven)
+        this.gas = gasAmnt; // change from zero to new val
+        this.mileage = mileageAmnt;
+        this.passengers = passAmnt;
+        this.seats = seatsNum; // change from zero to new val
+        this.driver = isDriven;
+    }
+
+    ... // the rest of the class
+}
+```
+
+I will note that this works because of the above mentioned overloading. Overloading works because the computer sees these functions by their names AND their inputs. This is called their signature. Thus, for the computer it's less like Car vs Car, and more like "Car:Void" vs "Car:Float-Float-Int-Int-Bool". You can tell which is which pretty easily.
+
+Let's get back to using our code. Our Car class looks like this:
+
+```C#
+class Car {
+    // we don't need to use this when creating these, but we could?
+    float gas;
+    float mileage;
+    int passengers;
+    int seats;
+    bool driver;
+
+    Car() {
+        Car(0, 0, 0, 0, false); // This will call the constructor below
+                                // The program can recognize which constructor you mean because of the input types
+    }
+
+    Car(float gasAmnt, float mileageAmnt, int passAmnt, int seatsNum, bool isDriven)
+        this.gas = gasAmnt; // change from zero to new val
+        this.mileage = mileageAmnt;
+        this.passengers = passAmnt;
+        this.seats = seatsNum; // change from zero to new val
+        this.driver = isDriven;
+    }
+
+    bool canDrive(float Distance) {
+        float number_of_gallons = Distance/mileage;
+
+        if (number_of_gallons > gas)
+            // the number of gallons needed is greater than the amount of gas we have
+            return false;
+        else
+            // else runs if the above statement doesn't
+            return true;
+    }
+
+    bool canPickup(int numPeople){
+        if (numPeople > (seats-passengers))
+            return false;
+        else
+            return true;
+    }
+
+    bool canDropoff(int numPeople){}
+        if (numPeople>passengers)
+            return false;
+        else
+            return true;
+        }
+}
+```
+
+And using it looks like this
+
+```C#
+Car car_one = new Car();
+Car car_two = new Car(5, 5, 10, 10, true);
+
+Print to the screen "The number of passengers in the second car is: " + car_two.passengers;
+Print to the screen "It is " + car_two.canPickup() + " that the second car can pickup more passengers.";
+```
+
+Would output
+
+```bash
+> The number of passengers in the second car is: 10
+> It is false that the second car can pickup more passengers
+```
+
+We could also use an Object to interact with a specific screen.
+
+```C#
+Screen MainScreen = The user's screen;
+Car car_one = new Car();
+Car car_two = new Car(5, 5, 10, 10, true);
+
+Screen.printLine("The number of passengers in the second car is: " + car_two.passengers);
+Screen.printLine("It is " + car_two.canPickup() + " that the second car can pickup more passengers.");
+```
+
+Some objects will be provided by the language, others will be provided by the Game Engine, while even more will need to be created by you.
+
+Let's give a cool example of a way someone might use a class. One of our friends created a function that checks if a Car object is a bus. They define a bus as any Car object with exactlty 24 seats.
+
+```C#
+bool carIsBus(Car car_in){
+    if (car_in.seats = 24){
+        return true;
+    }
+    if (car_in.seats != 24) { // this is the NOT equal operator
+        return false;
+    }
+}
+```
+
+Let's use our brilliant coder friend's function.
+
+```C#
+Car our_car = new Car(100, 100, 0, 5, true);
+
+// this car has 5 seats! It's not a bus
+
+Screen.printLine("It is " + carIsBus(our_car) + "that this car is a bus, because it has " + our_car.seats + "seats");
+```
+
+Outputs
+
+> It is true that this car is a bus, because it has 24 seats.
+
+Wait a minute! This isn't right.. Why not? Because our coder friend is STUPID. Or maybe they just messed up. Whatever the case, reread their conditional. They said "=" instead of "==". That means they *set* the value of the seats field, they didn't *check* the value.
+
+That's a rather simple mistake to make, and can be hard to notice. And, if we're dealing with less competent or experiences programmers, they might do things that don't work, or aren't clear.
+
+To mitigate issues from both of these, we can use something called access control, or access modifiers.
+
+encapsulation, abstraction, inheritance, and polymorphism
 
 
 #### Objects/Structures
