@@ -591,8 +591,333 @@ stateDiagram-v2
 
 *FizzFlark* handles its end of the work in ```Initialize```, ```ApplyFrame```, and ```UpdateFrame``` functions. In these, it generates the code to handle any settings we provide, like window size, aspect ratio, resolution, framerate, updates any physics in the scene, finds all the assets and models, makes sure updates are reaching the screen, and so on. 
 
+Beyond that, we only need to give the GameEngine our settings, and write the ```OnStart```, ```OnUpdate```, and ```OnClose``` methods to get all of the functionality that we're interested in. 
 
 
 
 #### Objects/Structures
-DM refernce cards/cheat sheets
+One thing that many GameEngines and programming languages support for modeling complex things and interactions is the concept of bundling things into Objects and Structures.
+
+Objects and Structures are both concepts for organizing and collecting together data and methods into a singular entity. Let's return to our Dungeon Master analogy. 
+
+A dungeon master doesn't only rely on having tables of information, rules for dice rolls, and ways to quickly perform tasks related to their game. They rely on it being organized, and on being able to access a single card or sheet that holds all of that information for them. They might have a sheet for character creation, or a sheet for combat rules, or a sheet with all of the basic class or spell information they need. The same applies for players and the things they used to quick reference, or easily play. 
+
+These organizations of data and functions are to tabletop games what objects and structures are to programming. 
+
+A structure is, simply put, a new description for a way to organize data. It structures other data types into a new one. Recall how we had data types such as the String, int, boolean, and so on. Each of those data types has a certain size within the computer, and each has their own rules for being interpreted. 
+
+A structure is the same way. For instance, we could make a new structure that consists of two ints, and have that new structure be called a coordinate. The two ints could represent an x and y position. We now have a new datatype that we can use easily for our variables, instead of needing to use two separate variables. With a struct, to access its members we use an operator called the dot operator. The dot operator (```.```) basically means "go to this location within this data". So something like 
+
+```c
+variable.second_variable
+```
+
+Means go to the "second_variable" location within the variable memory space. Since we're putting multiple variables inside of a new type, structures allow us to use the dot operator to access that internal data. Let's see this in action, and compare them below. 
+
+```C#
+// The non-struct method 
+int x_pos;
+int y_pos;
+
+x_pos = 5;
+y_pos = 7;
+
+print to the screen "" + x_pos
+print to the screen "" + y_pos
+```
+Which would output 
+```bash
+> 5
+> 7
+```
+
+Versus 
+```C#
+// The struct method
+
+struct coordinate { // create the struct
+  int x; // create an x member
+  int y; // create a y member
+}
+
+coordinate my_cord; // create the coordinate variable
+
+my_cord.x = 5;
+my_cord.y = 7;
+
+print to the screen "" + my_cord.x;
+print to the screen "" + my_cord.y;
+```
+Which would output
+```bash 
+> 5
+> 7
+```
+
+While this example may make the struct seem like a lot of extra work, consider what happens when instead of handling one coordinate, you're handling several. Let's go through the above example again with three coordinates. Let's print the x and y values of three different coordinates. 
+
+```C#
+// The non-struct method 
+int x_pos1;
+int y_pos1;
+
+x_pos1 = 5;
+y_pos1 = 7;
+
+
+int x_pos2; 
+int y_pos2; 
+
+x_pos2 = 8;
+x_pos2 = 9; 
+
+int x_pos3;
+int x_pos3;
+
+x_pos3 = 9;
+x_pos3 = 4;
+
+print to the screen "" + x_pos1
+print to the screen "" + y_pos1
+
+print to the screen "" + x_pos1
+print to the screen "" + y_pos2
+
+print to the screen "" + x_pos3
+print to the screen "" + y_pos3
+```
+
+Which would output 
+
+```bash 
+>5
+>7
+>5
+>9
+>9
+>4
+```
+
+Evaluate the code and the outputs. Did everything go as expected? if not, why? Let's look at the example using structs. 
+
+```C#
+// The struct method
+
+struct coordinate { // create the struct
+  int x; // create an x member
+  int y; // create a y member
+}
+
+coordinate my_cord1; // create the coordinate variable
+coordinate my_cord2;
+coordinate my_cord3;
+
+my_cord1.x = 5;
+my_cord1.y = 7;
+
+my_cord2.x = 8;
+my_cord2.y = 9;
+
+my_cord3.x = 9;
+my_cord3.y = 4;
+
+print to the screen "" + my_cord1.x;
+print to the screen "" + my_cord1.y;
+
+
+print to the screen "" + my_cord1.x;
+print to the screen "" + my_cord2.y;
+
+
+print to the screen "" + my_cord3.x;
+print to the screen "" + my_cord3.y;
+```
+Which outputs 
+```bash 
+>5
+>7
+>5
+>9
+>9
+>4
+```
+
+They're still very very similar. Overall, this whole thing is a mess. Let's clean them up a bit. One, both structs and variables can be initialized (have their values set) when they're created. With structs, this happens inside of curly braces (like with arrays) and you treat each of its members like an internal (in its scope) variable. Example:
+
+```C#
+struct TestStruct {
+  bool cool_bool;
+  int fun_int; 
+  String angry_string;
+}
+
+TestStruct my_variable = new TestStruct {cool_bool = false, fun_int = 3, angry_string = "IM MAD"};
+``` 
+
+You'll notice there that I've used an unseen operator, ```new```. The ```new``` operator can be ignored for now, but basically it calls on an Object or Structs "contructor" function. A constructor is a function whose job is to setup the memory for an object or structure, so that it can be used. Structs do *not* need to be initialized via the ```new``` operator, but if they aren't then you need to set each field manually, like below, before you can use it. 
+
+```C#
+struct TestStruct {
+  bool cool_bool;
+  int fun_int; 
+  String angry_string;
+}
+
+TestStruct my_variable; 
+my_variable.cool_bool = false;
+my_variable.fun_int = 3;
+my_variable.angry_string = "IM MAD";
+``` 
+
+Right now we're using the default constructor, since we haven't written one, which doesn't really do much, so we assign the values after between the curly braces ```{...}```. 
+
+Let's redo the above examples like this. 
+
+```C#
+// The non-struct method (redone)
+int x_pos1 = 5;
+int y_pos1 = 7;
+
+int x_pos2 = 8; 
+int y_pos2 = 9; 
+
+int x_pos3 = 9;
+int x_pos3 = 4;
+
+print to the screen "" + x_pos1
+print to the screen "" + y_pos1
+
+print to the screen "" + x_pos1
+print to the screen "" + y_pos2
+
+print to the screen "" + x_pos3
+print to the screen "" + y_pos3
+```
+
+Which would output 
+
+```bash 
+>5
+>7
+>5
+>9
+>9
+>4
+```
+And then our struct version.
+```C#
+// The struct method (redone)
+
+struct coordinate { // create the struct
+  int x; // create an x member
+  int y; // create a y member
+}
+
+coordinate my_cord1 = new coordinate {x = 5, y = 7}; // create the coordinate variable
+coordinate my_cord2 = new coordinate {x = 8, y = 9};
+coordinate my_cord3 = new coordinate {x = 9, y = 4};
+
+
+print to the screen "" + my_cord1.x;
+print to the screen "" + my_cord1.y;
+
+print to the screen "" + my_cord1.x;
+print to the screen "" + my_cord2.y;
+
+print to the screen "" + my_cord3.x;
+print to the screen "" + my_cord3.y;
+```
+Which outputs 
+```bash 
+>5
+>7
+>5
+>9
+>9
+>4
+```
+
+That's looking a little bit cleaner. But let's introduce another benefit of Structs and Objects, their use in loops and functions. 
+
+Loops can loop over more than a simple condition. Loops can often *also* be given an "iterator" or iteration condition. An iterator is something that creates an iterator condition. 
+
+What is an iterator condition? An iterator condition is something that gives a loop the command to continue, and does so until it has nothing else to iterate over. For instance, if we have an array, we can loop over the elements within that array. For this, the *FizzFlark* GameEngine gives us the ```foreach``` statement. The ```foreach``` statement executes for each element in an enumerable or iterable condition - A.K.A a condition that has multiple values within it. 
+
+A simple use of the ```foreach``` statement is the ```foreach ... in ...``` statement. It is structured as such: 
+```C#
+foreach ( datatype var_name in Iterable){
+  ... // the stuff to be done
+ }
+```
+Here's an example:
+```C#
+int[] my_numbers = new {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+foreach (int number in my_numbers){
+  print to the screen "" + number;
+}
+```
+Outputs
+```bash
+> 0
+> 1
+> 2
+> 3
+> 4
+> 5
+> 6
+> 7
+> 8
+> 9
+> 10
+```
+
+For something like counting to ten, this is pretty weak, but what about for our coordinates? We could make a list of coordinates, loop over them, and print out their fields. 
+
+```C#
+// The struct method (redone)
+
+struct coordinate { // create the struct
+  int x; // create an x member
+  int y; // create a y member
+}
+
+coordinate my_cord1 = new coordinate {x = 5, y = 7}; // create the coordinate variable
+coordinate my_cord2 = new coordinate {x = 8, y = 9};
+coordinate my_cord3 = new coordinate {x = 9, y = 4};
+
+coordinate[] coords = {my_cord1, my_cord2 my_cord3};
+
+for (coordinate coord in coords){
+  print to the screen "" + coord.x
+  print to the screen "" + coord.y
+}
+```
+Which outputs 
+```bash 
+> 5
+> 7
+> 8
+> 9
+> 9
+> 4
+```
+
+Now that we've combined structures and an iterator, we have code that is concise, and significantly easier to spot bugs in than what we started with. 
+
+We can also use structs in functions. What if we want to return an x and a y coordinate pair from a function? If we wanted to do it without structs, we would need to use an int array of size two. With a struct, we can do the same thing but cleaner. 
+
+```C#
+struct coordinate {
+  int x
+  int y
+}
+
+A coordinate function starshipPosition()
+```
+
+
+DM reference cards/cheat sheets
+
+
+
