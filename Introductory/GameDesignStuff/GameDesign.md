@@ -714,15 +714,14 @@ Which would output
 > 10
 ```
 
-
-
 #### Objects/Structures
+One thing that many GameEngines and programming languages support for modeling complex things and interactions is the concept of bundling things into Objects and Structures.
 
-To clarify the role of Objects and Structures, let's return to our Dungeon Master analogy. We've discussed that dungeon masters may have functions/methods in the form of rulebooks and tables. We've discussed that a DM may have assets in the form of character cards and art. We've discussed that they DMs work to combine these things to simulate a world. But let's also consider the organization of those things. 
+Objects and Structures are both concepts for organizing and collecting together data and methods into a singular entity. Let's return to our Dungeon Master analogy. 
 
-A Dungeon Master (hopefully) doesn't reference the entirety of their several hundred pages of content, and several tables of cheat sheets and tables. Instead, they have their content and assets organized. 
+A dungeon master doesn't only rely on having tables of information, rules for dice rolls, and ways to quickly perform tasks related to their game. They rely on it being organized, and on being able to access a single card or sheet that holds all of that information for them. They might have a sheet for character creation, or a sheet for combat rules, or a sheet with all of the basic class or spell information they need. The same applies for players and the things they used to quick reference, or easily play. 
 
-A DM might have a cheat sheet consisting of only the rules for character action, and a separate sheet with only the rules regarding loot or crafting. Their screen might hide tables for managing travel, and calculating saves, while the sheets the players are given might contain the summaries of their spells and stats. 
+These organizations of data and functions are to tabletop games what objects and structures are to programming. 
 
 The running theme with the above is that everything that belongs together, is encapsulated into its own unit. This simplifies a DM's job, because they can manage a single thing in a single situation, and have everything they might need to do that. 
 
@@ -1280,17 +1279,9 @@ That's a rather simple mistake to make, and can be hard to notice. And, if we're
 
 To mitigate issues from both of these, we can use something called access control, or access modifiers.
 
-encapsulation, abstraction, inheritance, and polymorphism
+encapsulation, abstraction, inheritance, and polymorphism [TODO]
 
-
-#### Objects/Structures
-One thing that many GameEngines and programming languages support for modeling complex things and interactions is the concept of bundling things into Objects and Structures.
-
-Objects and Structures are both concepts for organizing and collecting together data and methods into a singular entity. Let's return to our Dungeon Master analogy. 
-
-A dungeon master doesn't only rely on having tables of information, rules for dice rolls, and ways to quickly perform tasks related to their game. They rely on it being organized, and on being able to access a single card or sheet that holds all of that information for them. They might have a sheet for character creation, or a sheet for combat rules, or a sheet with all of the basic class or spell information they need. The same applies for players and the things they used to quick reference, or easily play. 
-
-These organizations of data and functions are to tabletop games what objects and structures are to programming. 
+### Structures 
 
 A structure is, simply put, a new description for a way to organize data. It structures other data types into a new one. Recall how we had data types such as the String, int, boolean, and so on. Each of those data types has a certain size within the computer, and each has their own rules for being interpreted. 
 
@@ -1602,14 +1593,25 @@ struct coordinate {
 }
 
 A coordinate function starshipPosition(ship)
-        ship_x = getXLocation(ship);
-        ship_y = getYLocation(ship);
+        int ship_x = getXLocation(ship);
+        int ship_y = getYLocation(ship);
         coordinate return_coordinate = new coordinate{x = ship_x, y = ship_y};
         return return_coordinate;
 ```
+Or in a less *FlarkSpeakean* way
 
+```C#
+struct coordinate {
+  int x
+  int y
+}
 
-DM reference cards/cheat sheets
-
+coordinate starshipPosition(Ship ship) /* Ship is a class */ {
+        int ship_x = getXLocation(ship);
+        int ship_y = getYLocation(ship);
+        coordinate return_coordinate = new coordinate{x = ship_x, y = ship_y};
+        return return_coordinate;
+}
+```
 
 
