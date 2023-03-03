@@ -913,7 +913,11 @@ struct coordinate {
   int y
 }
 
-A coordinate function starshipPosition()
+A coordinate function starshipPosition(ship)
+        ship_x = getXLocation(ship);
+        ship_y = getYLocation(ship);
+        coordinate return_coordinate = new coordinate{x = ship_x, y = ship_y};
+        return return_coordinate;
 ```
 
 
