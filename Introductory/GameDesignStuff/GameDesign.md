@@ -1,3 +1,9 @@
+# A note
+
+Please notify me of any errors, difficult to read or understand, or unclear segments of this writing at waltba04@pfw.edu. Written with love, and an abundance of newness, is my take at an introduction 
+
+- B. W
+
 ## What is Game Design? 
 Described in a way I feel both simple and somewhat poetic, game design (or game development) is the interdisciplinary art of bringing artificial worlds to life. Much like a Game Manager for board games and TTRPGs, Game Designers seek to immerse their players in a world, and provide an experience for their players to enjoy. 
 
@@ -52,12 +58,15 @@ Do not be afraid to reference the documentation, do not be afraid to experiment 
 
 ## Introduction
 I will introduce basic programming concepts, and lead relatively slowly into examples. The examples I give will start off relying on english style psuedo-code (pretend code) alongside explanations in common terminology. This simply means you’ll be reading sentences that I’m telling you a computer will interpret, and I will explain why its written like that. 
+
 Alongside those examples, and more heavily the deeper into this topic we dive, I will provide psuedo-code in the style of actual programming languages. I will focus most heavily on C#-like psuedo-code, simply because it’s commonly used in introductory game design teaching. 
+
 In all of my examples, I have decided I will include a “given” section. A benefit, or several benefits, which we assume to be provided by the Game Engine. I will also attempt to provide example problems at the end of each section, to be solved using psuedo-code and the “given” section assigned to that problem. I believe this will increase your ability to use the benefits of a Game Engine effectively, as well as evaluate the benefits a Game Engine provides to decide if it matches a game-idea you might have in mind. I’ll say that, if possible, you should have a friend read and evaluate any psuedo-code you write the way that a computer would, exactly as stated and step by step. 
 
 #### Simple Programming 
 
 Simple Programming is just writing things that we want to have happen. Let’s practice some simple things with a simple Game Engine we’ll call *FizzFlark*
+
 *FizzFlark Givens*
 
 | Feature| How|
