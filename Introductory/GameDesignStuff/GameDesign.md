@@ -2,7 +2,7 @@
 
 Please notify me of any errors, difficult to read or understand, or unclear segments of this writing at waltba04@pfw.edu. Written with love, and an abundance of newness, is my take at an introduction 
 
-- B. W
+\- B. W
 
 ## What is Game Design? 
 Described in a way I feel both simple and somewhat poetic, game design (or game development) is the interdisciplinary art of bringing artificial worlds to life. Much like a Game Manager for board games and TTRPGs, Game Designers seek to immerse their players in a world, and provide an experience for their players to enjoy. 
